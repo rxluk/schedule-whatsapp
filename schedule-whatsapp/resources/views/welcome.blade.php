@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="Sistema de Agendamento WhatsApp">
-    <title>Login - WhatsApp Scheduler</title>
+    <title>Scheduler</title>
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -226,25 +226,34 @@
     <div class="login-container">
         <div class="login-card">
             <div class="login-header">
-                <img src="{{ asset('images/logo.png') }}" alt="WhatsApp Scheduler Logo" class="logo">
+                <img src="{{ asset('images/logo.png') }}" alt="Mindra Logo" class="logo">
                 <h1 class="login-title">Bem-vindo ao Sistema</h1>
                 <p class="login-subtitle">Faça login para acessar sua conta</p>
             </div>
             
             <div class="login-body">
-                <form action="#" method="POST">
+                <form action="{{ route('login') }}" method="POST">
+                    @csrf
                     <div class="input-group">
                         <i class="fas fa-envelope"></i>
-                        <input type="email" class="form-input" id="email" placeholder="E-mail" required>
+                        <input type="email" class="form-input" id="email" name="email" placeholder="E-mail" required value="{{ old('email') }}">
                     </div>
+                    
+                    @error('email')
+                        <div style="color: #e74c3c; margin-bottom: 15px; font-size: 14px;">{{ $message }}</div>
+                    @enderror
                     
                     <div class="input-group">
                         <i class="fas fa-lock"></i>
-                        <input type="password" class="form-input" id="password" placeholder="Senha" required>
+                        <input type="password" class="form-input" id="password" name="password" placeholder="Senha" required>
                         <button type="button" class="password-toggle" onclick="togglePassword()" aria-label="Mostrar senha">
                             <i class="fas fa-eye" id="toggleIcon"></i>
                         </button>
                     </div>
+                    
+                    @error('password')
+                        <div style="color: #e74c3c; margin-bottom: 15px; font-size: 14px;">{{ $message }}</div>
+                    @enderror
                     
                     <button type="submit" class="login-btn">ENTRAR</button>
                 </form>
