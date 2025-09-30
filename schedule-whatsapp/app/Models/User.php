@@ -12,38 +12,21 @@ class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
     
-    /**
-     * The primary key for the model.
-     *
-     * @var string
-     */
-    protected $primaryKey = 'user_id';
-    
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
+    protected $table = 'users';
+
     protected $fillable = [
+        'name',
+        'phone_number',
         'email',
         'password_hash',
         'permission_level',
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
     protected $hidden = [
         'password_hash',
+        'remember_token',
     ];
     
-    /**
-     * Get the password for the user.
-     *
-     * @return string
-     */
     public function getAuthPassword()
     {
         return $this->password_hash;
