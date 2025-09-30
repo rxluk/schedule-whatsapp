@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="description" content="Sistema de Agendamento WhatsApp">
-    <title>Dashboard - ZapAgenda</title>
+    <title>@yield('title', 'Dashboard') - AgendaZap</title>
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -65,7 +65,9 @@
             max-width: 120px;
             height: auto;
             margin-bottom: 10px;
-        }                .sidebar-title {
+        }
+        
+        .sidebar-title {
             font-size: 18px;
             font-weight: 600;
             color: var(--primary-color);
@@ -207,6 +209,13 @@
             text-align: center;
         }
         
+        /* Menu toggle styling */
+        .menu-toggle {
+            cursor: pointer;
+            display: none; /* Hidden by default */
+        }
+        
+        /* Media query for mobile responsiveness */
         @media (max-width: 768px) {
             .sidebar {
                 transform: translateX(-100%);
@@ -226,11 +235,12 @@
                 padding: 15px 10px;
             }
             
+            /* Menu toggle only appears on mobile */
             .menu-toggle {
                 display: block;
-                cursor: pointer;
             }
             
+            /* Ensure header positioning is correct */
             .header {
                 position: relative;
                 padding: 10px 15px;
@@ -243,15 +253,37 @@
             .header-title {
                 font-size: 18px;
             }
-            
-            .row {
-                margin: 0 -5px;
-            }
-            
-            .col-md-6 {
-                padding: 0 5px;
+        }
+        
+        /* Extra assurance that menu toggle is hidden on desktop */
+        @media (min-width: 769px) {
+            .menu-toggle {
+                display: none !important;
             }
         }
+
+        /* Alert styles */
+        .alert {
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+        }
+        
+        /* CSS realmente limpo - tudo relacionado ao menu foi removido */
+
+        .alert-success {
+            background-color: rgba(46, 204, 113, 0.1);
+            color: #2ecc71;
+            border-left: 3px solid #2ecc71;
+        }
+
+        .alert-danger {
+            background-color: rgba(231, 76, 60, 0.1);
+            color: #e74c3c;
+            border-left: 3px solid #e74c3c;
+        }
+        
+        /* Media query removida para evitar duplicação */
         
         .row {
             display: flex;
@@ -290,17 +322,18 @@
             }
         }
     </style>
+    @yield('styles')
 </head>
 <body>
     <div class="sidebar" id="sidebar">
         <div class="sidebar-header">
             <img src="{{ asset('images/logo.png') }}" alt="Logo" class="logo-small">
-            <h2 class="sidebar-title">ZapAgenda</h2>
+            <h2 class="sidebar-title">AgendaZap</h2>
         </div>
         
         <ul class="sidebar-nav">
             <li class="nav-item">
-                <a href="{{ route('dashboard') }}" class="nav-link active">
+                <a href="{{ route('dashboard') }}" class="nav-link {{ request()->routeIs('dashboard') ? 'active' : '' }}">
                     <i class="fas fa-tachometer-alt"></i>
                     <span>Dashboard</span>
                 </a>
@@ -328,6 +361,13 @@
             </li>
             
             <li class="nav-item">
+                <a href="#" class="nav-link">
+                    <i class="fas fa-robot"></i>
+                    <span>Bot de WhatsApp</span>
+                </a>
+            </li>
+            
+            <li class="nav-item">
                 <form action="{{ route('logout') }}" method="POST" class="logout-form">
                     @csrf
                     <button type="submit" class="logout-btn">
@@ -342,46 +382,29 @@
     <div class="main-content">
         <div class="header">
             <div class="d-flex align-items-center">
-                <span class="menu-toggle d-md-none me-3" id="menu-toggle">
+                <!-- Menu toggle only shown on mobile devices -->
+                <span class="menu-toggle d-block d-md-none me-3" id="menu-toggle">
                     <i class="fas fa-bars"></i>
                 </span>
-                <h1 class="header-title">Dashboard</h1>
+                <h1 class="header-title">@yield('header', 'Dashboard')</h1>
             </div>
             
             <div class="user-menu">
                 <div class="user-info">
-                    <div class="user-name">{{ $user->email }}</div>
-                    <div class="user-role">{{ $user->permission_level }}</div>
+                    <div class="user-name">{{ Auth::user()->email }}</div>
+                    <div class="user-role">{{ Auth::user()->permission_level }}</div>
                 </div>
                 
                 <div class="avatar">
-                    {{ substr($user->email, 0, 1) }}
+                    {{ substr(Auth::user()->email, 0, 1) }}
                 </div>
             </div>
         </div>
         
-        <div class="card">
-            <h2 class="card-title">Bem-vindo ao ZapAgenda!</h2>
-            <p>Este é o seu painel de controle para gerenciar agendamentos de mensagens no WhatsApp.</p>
-        </div>
-        
-        <div class="row">
-            <div class="col-md-6">
-                <div class="card">
-                    <h3 class="card-title">Mensagens Agendadas</h3>
-                    <p>Você não tem mensagens agendadas no momento.</p>
-                </div>
-            </div>
-            
-            <div class="col-md-6">
-                <div class="card">
-                    <h3 class="card-title">Atividade Recente</h3>
-                    <p>Nenhuma atividade recente para mostrar.</p>
-                </div>
-            </div>
-        </div>
+        @yield('content')
     </div>
     
+    <!-- Script para mobilidade removido completamente -->
     <script>
         const menuToggle = document.getElementById('menu-toggle');
         const sidebar = document.getElementById('sidebar');
@@ -392,5 +415,6 @@
             });
         }
     </script>
+    @yield('scripts')
 </body>
 </html>

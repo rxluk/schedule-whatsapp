@@ -2,7 +2,7 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="description" content="Sistema de Agendamento WhatsApp">
     <title>Scheduler</title>
 
@@ -41,12 +41,16 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            overflow-x: hidden;
+            width: 100%;
+            padding: 0 10px;
         }
         
         .login-container {
             width: 100%;
             max-width: 400px;
-            padding: 20px;
+            padding: 10px;
+            margin: 0 auto;
         }
         
         .login-card {
@@ -173,16 +177,26 @@
         
         @media (max-width: 480px) {
             .login-container {
-                padding: 15px;
+                padding: 10px;
                 max-width: 100%;
+                width: 95%;
             }
             
             .login-title {
                 font-size: 20px;
             }
             
+            .login-header {
+                padding: 20px 15px;
+            }
+            
+            .login-body {
+                padding: 0 15px 20px;
+            }
+            
             .form-input {
                 padding: 12px 12px 12px 40px;
+                font-size: 14px;
             }
             
             .login-btn {
@@ -191,6 +205,10 @@
             
             .logo {
                 max-width: 80px;
+            }
+            
+            .login-subtitle {
+                font-size: 13px;
             }
         }
         
