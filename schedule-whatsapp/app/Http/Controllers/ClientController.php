@@ -18,12 +18,22 @@ class ClientController extends Controller
     public function store(Request $request)
     {
         $request->validate([
+            'recipient' => 'required|string', 
             'name' => 'required|string|max:255',
             'phone_number' => 'required|string|max:13',
         ]);
 
+        $user = User::where('phone_number', $request->recipient)->first();
+
+        if (!$user) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Usuário destinatário não encontrado.'
+            ], 404);
+        }
+
         $client = Client::create([
-            'user_id' => Auth::id(),
+            'user_id' => $user->id,
             'name' => $request->name,
             'phone_number' => $request->phone_number,
         ]);
