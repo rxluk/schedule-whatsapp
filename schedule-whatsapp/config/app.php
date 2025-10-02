@@ -122,6 +122,18 @@ return [
     'key' => env('APP_KEY'),
 
     'cipher' => 'AES-256-CBC',
+    
+    /*
+    |--------------------------------------------------------------------------
+    | API Key
+    |--------------------------------------------------------------------------
+    |
+    | This key is used for authenticating API requests from external services.
+    | Store this securely and share only with authorized services.
+    |
+    */
+    
+    'api_key' => env('API_KEY'),
 
     /*
     |--------------------------------------------------------------------------
