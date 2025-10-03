@@ -3,80 +3,76 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Appointment;
+use App\Models\Service;
+use App\Models\Client;
+use Illuminate\Support\Facades\Auth;
 
 class AppointmentController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
-        //
+        $appointments = Appointment::where('user_id', Auth::id())
+            ->with(['client', 'service'])
+            ->orderBy('appointment_date', 'asc')
+            ->orderBy('appointment_time', 'asc')
+            ->get();
+            
+        return view('appointments.index', compact('appointments'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    public function getAppointmentsByUserId(Request $request)
     {
-        //
+        $appointments = Appointment::where('user_id', $request->user_id)
+            ->get();
+        
+        if($appointments->isEmpty()) {
+            return response()->json(['error' => 'No appointments found for this user'], 404);
+        }
+        return response()->json($appointments);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'client_id' => 'required|exists:clients,id',
+            'service_id' => 'required|exists:services,id',
+            'user_id' => 'required|exists:users,id',
+            'appointment_date' => 'required|date',
+            'appointment_time' => 'required|date_format:H:i',
+        ]);
+
+        $appointment = Appointment::create([
+            'client_id' => $request->client_id,
+            'service_id' => $request->service_id,
+            'user_id' => $request->user_id,
+            'appointment_date' => $request->appointment_date,
+            'appointment_time' => $request->appointment_time,
+            'status' => 'Agendado',
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Consulta agendada com sucesso',
+            'data' => $appointment
+        ], 201);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function show($id)
     {
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function edit($id)
     {
         //
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, $id)
     {
         //
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($id)
     {
         //

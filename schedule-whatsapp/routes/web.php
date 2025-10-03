@@ -25,4 +25,7 @@ Route::middleware(['auth'])->group(function () {
     
     // Rotas de Client
     Route::get('/clients', [ClientController::class, 'index'])->name('clients.index');
+    
+    // Rotas de Appointment
+    Route::get('/appointments', [App\Http\Controllers\AppointmentController::class, 'index'])->name('appointments.index');
 });

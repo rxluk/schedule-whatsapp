@@ -12,7 +12,6 @@ class ClientController extends Controller
     public function index()
     {
         $clients = Client::where('user_id', Auth::id())->get();
-        
         return view('client.index', compact('clients'));
     }
 
