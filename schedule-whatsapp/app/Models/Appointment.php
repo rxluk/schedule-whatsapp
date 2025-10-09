@@ -17,6 +17,7 @@ class Appointment extends Model
         'user_id',
         'appointment_date',
         'appointment_time',
+        'appointment_time_end',
         'status',
     ];
 
