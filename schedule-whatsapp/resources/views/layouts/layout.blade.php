@@ -308,6 +308,16 @@
                             <i class="fas fa-calendar-alt"></i> Agenda
                         </a>
                     </li>
+                    <li>
+                        <a href="{{ route('unavailable-days.index') }}" class="{{ request()->routeIs('unavailable-days.*') ? 'active' : '' }}">
+                            <i class="fas fa-calendar-times"></i> Dias Indisponíveis
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('working-days.index') }}" class="{{ request()->routeIs('working-days.*') ? 'active' : '' }}">
+                            <i class="fas fa-calendar-check"></i> Dias Úteis
+                        </a>
+                    </li>
                     <!-- Futuros itens de menu serão adicionados aqui -->
                 </ul>
             </div>

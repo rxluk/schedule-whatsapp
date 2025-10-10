@@ -1,0 +1,10 @@
+<VirtualHost *:80>
+	ServerName agenda.mindra.me
+
+	ProxyPreserveHost On
+	ProxyPass / http://localhost:8005/
+	ProxyPassReverse / http://localhost:8005/
+RewriteEngine on
+RewriteCond %{SERVER_NAME} =agenda.mindra.me
+RewriteRule ^ https://%{SERVER_NAME}%{REQUEST_URI} [END,NE,R=permanent]
+</VirtualHost>
