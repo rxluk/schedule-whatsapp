@@ -369,14 +369,12 @@
                     document.body.classList.toggle('sidebar-open');
                 });
                 
-                // Fechar o menu quando clicar no overlay
                 overlay.addEventListener('click', function() {
                     sidebar.classList.remove('active');
                     overlay.classList.remove('active');
                     document.body.classList.remove('sidebar-open');
                 });
                 
-                // Fechar o menu ao clicar em links do menu (em dispositivos móveis)
                 const menuLinks = sidebar.querySelectorAll('a');
                 menuLinks.forEach(link => {
                     link.addEventListener('click', function() {

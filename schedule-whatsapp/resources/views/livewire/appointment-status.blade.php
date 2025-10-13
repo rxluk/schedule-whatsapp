@@ -59,14 +59,16 @@
             top: 100%;
             left: 0;
             margin-top: 5px;
-            min-width: 150px;
+            min-width: 180px;
             max-height: 200px;
             overflow-y: auto;
+            overflow-x: visible;
             background-color: white;
             border-radius: 5px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.15);
             z-index: 999999;
             display: none;
+            white-space: nowrap;
         }
         
         .status-option {
@@ -74,6 +76,9 @@
             cursor: pointer;
             border-bottom: 1px solid #f5f5f5;
             white-space: nowrap;
+            width: 100%;
+            box-sizing: border-box;
+            overflow: visible;
         }
         
         .status-option:hover {
@@ -128,7 +133,6 @@
             function showDropdown() {
                 const rect = badge.getBoundingClientRect();
                 
-                // Mover o dropdown para o body para evitar problemas de z-index
                 document.body.appendChild(dropdown);
                 
                 const spaceBelow = window.innerHeight - rect.bottom;
@@ -138,11 +142,9 @@
                 
                 const openUpwards = spaceBelow < dropdownHeight && spaceAbove > dropdownHeight;
                 
-                // Usamos posição fixa para garantir que o dropdown não seja afetado pelo fluxo do documento
                 dropdown.style.position = 'fixed';
                 dropdown.style.display = 'block';
                 
-                // Calculamos a posição exata baseada nas coordenadas do badge
                 if (openUpwards) {
                     dropdown.style.top = 'auto';
                     dropdown.style.bottom = (window.innerHeight - rect.top + 5) + 'px';
@@ -153,7 +155,31 @@
                 
                 dropdown.style.left = rect.left + 'px';
                 dropdown.style.zIndex = '999999';
-                dropdown.style.width = Math.max(rect.width, 150) + 'px';
+                
+                dropdown.style.width = Math.max(rect.width, 180) + 'px';
+                
+                setTimeout(() => {
+                    const options = dropdown.querySelectorAll('.status-option');
+                    let maxWidth = 180;
+                    
+                    options.forEach(option => {
+                        const text = option.textContent.trim();
+                        const tempSpan = document.createElement('span');
+                        tempSpan.style.visibility = 'hidden';
+                        tempSpan.style.position = 'absolute';
+                        tempSpan.style.whiteSpace = 'nowrap';
+                        tempSpan.style.font = window.getComputedStyle(option).font;
+                        tempSpan.textContent = text;
+                        document.body.appendChild(tempSpan);
+                        
+                        const optionWidth = tempSpan.offsetWidth + 40;
+                        maxWidth = Math.max(maxWidth, optionWidth);
+                        
+                        document.body.removeChild(tempSpan);
+                    });
+                    
+                    dropdown.style.width = maxWidth + 'px';
+                }, 0);
                 
                 setTimeout(() => {
                     const dropdownRect = dropdown.getBoundingClientRect();
@@ -170,12 +196,10 @@
                 dropdown.style.display = 'none';
                 overlay.style.display = 'none';
                 
-                // Restauramos o dropdown para o container original
                 const container = badge.closest('.status-container');
                 if (container && dropdown.parentNode === document.body) {
                     container.appendChild(dropdown);
                     
-                    // Restaurar os estilos originais
                     dropdown.style.position = 'absolute';
                     dropdown.style.top = '100%';
                     dropdown.style.left = '0';
