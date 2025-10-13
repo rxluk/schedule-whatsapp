@@ -395,5 +395,62 @@
     
     <!-- Alpine.js -->
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        function confirmDelete(formElement, title = 'Tem certeza?', text = 'Esta ação não poderá ser revertida!') {
+            Swal.fire({
+                title: title,
+                text: text,
+                icon: 'warning',
+                iconColor: '#ff6b6b',
+                showCancelButton: true,
+                confirmButtonColor: '#4a6cf7',
+                cancelButtonColor: '#e5e5e5',
+                confirmButtonText: 'Sim, excluir!',
+                cancelButtonText: 'Cancelar',
+                background: '#fff',
+                width: '380px'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    formElement.submit();
+                }
+            });
+            return false;
+        }
+    </script>
+    <style>
+        .swal2-popup {
+            font-family: 'Poppins', sans-serif;
+            border-radius: 15px !important;
+            padding: 1.5em !important;
+        }
+        .swal2-title {
+            font-size: 1.5em !important;
+            font-weight: 600 !important;
+            color: var(--dark-color) !important;
+        }
+        .swal2-html-container {
+            font-size: 1em !important;
+            color: var(--text-color) !important;
+        }
+        .swal2-confirm {
+            background-color: var(--accent-color) !important;
+            border-radius: 8px !important;
+            font-weight: 500 !important;
+            padding: 10px 24px !important;
+        }
+        .swal2-cancel {
+            background-color: #f1f1f1 !important;
+            color: var(--text-color) !important;
+            border-radius: 8px !important;
+            font-weight: 500 !important;
+            padding: 10px 24px !important;
+        }
+        .swal2-icon {
+            font-size: 1.75em !important;
+        }
+    </style>
 </body>
 </html>

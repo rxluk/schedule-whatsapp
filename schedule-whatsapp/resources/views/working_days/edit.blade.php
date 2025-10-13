@@ -1,11 +1,11 @@
 @extends('layouts.layout')
 
-@section('title', 'Adicionar Dia Útil - AgendaZap')
+@section('title', 'Editar Dia Útil - AgendaZap')
 
 @section('content')
     <div class="working-day-container">
         <div class="working-day-header">
-            <h1 class="page-title">Adicionar Dia Útil</h1>
+            <h1 class="page-title">Editar Dia Útil</h1>
             <div class="working-day-actions">
                 <a href="{{ route('working-days.index') }}" class="btn-back">
                     <i class="fas fa-arrow-left"></i> Voltar
@@ -26,10 +26,10 @@
             
             <div class="form-card">
                 @include('working_days.partials.form', [
-                    'action' => route('working-days.store'),
-                    'workingDay' => null,
-                    'isEdit' => false,
-                    'submitText' => 'Salvar'
+                    'action' => route('working-days.update', $workingDay->id),
+                    'workingDay' => $workingDay,
+                    'isEdit' => true,
+                    'submitText' => 'Salvar Alterações'
                 ])
             </div>
         </div>

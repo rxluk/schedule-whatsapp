@@ -87,7 +87,7 @@
                                             <form method="POST" action="{{ route('working-days.destroy', $day->id) }}" style="display: inline-block;">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="btn-icon btn-delete" onclick="return confirm('Tem certeza que deseja excluir este dia útil?')" title="Excluir">
+                                                <button type="submit" class="btn-icon btn-delete" onclick="return confirmDelete(this.form, 'Deseja excluir este dia útil?', 'Esta ação não poderá ser revertida!')" title="Excluir">
                                                     <i class="fas fa-trash-alt"></i>
                                                 </button>
                                             </form>
@@ -144,7 +144,7 @@
                                         <form method="POST" action="{{ route('working-days.destroy', $day->id) }}" style="display: inline-block;">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="btn-icon btn-delete" onclick="return confirm('Tem certeza que deseja excluir este dia útil?')" title="Excluir">
+                                            <button type="submit" class="btn-icon btn-delete" onclick="return confirmDelete(this.form, 'Deseja excluir este dia útil?', 'Esta ação não poderá ser revertida!')" title="Excluir">
                                                 <i class="fas fa-trash-alt"></i>
                                             </button>
                                         </form>
@@ -468,4 +468,6 @@
         }
     }
 </style>
+
+
 @endsection
