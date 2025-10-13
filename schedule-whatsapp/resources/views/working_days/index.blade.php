@@ -3,7 +3,8 @@
 @section('title', 'Dias Úteis - AgendaZap')
 
 @section('content')
-    <div class="working-days-container">
+
+    <div class ="working-days-container">
         <div class="working-days-header">
             <h1 class="page-title">Dias Úteis</h1>
             <div class="working-days-actions">
@@ -12,6 +13,9 @@
                 </a>
             </div>
         </div>
+    </div>
+
+    <div class="working-days-container">
         
         <div class="working-days-content">
             @if(session('success'))
@@ -36,7 +40,7 @@
                 </div>
             @else
                 <div class="working-days-list">
-                    <div class="table-responsive">
+                    <div class="table-responsive desktop-view">
                         <table class="table">
                             <thead>
                                 <tr>
@@ -92,6 +96,62 @@
                                 @endforeach
                             </tbody>
                         </table>
+                    </div>
+                    
+                    <div class="mobile-view">
+                        @foreach($workingDays as $day)
+                            <div class="day-card">
+                                <div class="day-header">
+                                    @switch($day->day_of_week)
+                                        @case(1)
+                                            <h3>Segunda-feira</h3>
+                                            @break
+                                        @case(2)
+                                            <h3>Terça-feira</h3>
+                                            @break
+                                        @case(3)
+                                            <h3>Quarta-feira</h3>
+                                            @break
+                                        @case(4)
+                                            <h3>Quinta-feira</h3>
+                                            @break
+                                        @case(5)
+                                            <h3>Sexta-feira</h3>
+                                            @break
+                                        @case(6)
+                                            <h3>Sábado</h3>
+                                            @break
+                                        @case(7)
+                                            <h3>Domingo</h3>
+                                            @break
+                                    @endswitch
+                                </div>
+                                <div class="day-body">
+                                    <div class="day-info">
+                                        <div class="info-item">
+                                            <span class="info-label">Abertura:</span>
+                                            <span class="info-value">{{ \Carbon\Carbon::parse($day->opening_time)->format('H:i') }}</span>
+                                        </div>
+                                        <div class="info-item">
+                                            <span class="info-label">Fechamento:</span>
+                                            <span class="info-value">{{ \Carbon\Carbon::parse($day->closing_time)->format('H:i') }}</span>
+                                        </div>
+                                    </div>
+                                    <div class="day-actions">
+                                        <a href="{{ route('working-days.edit', $day->id) }}" class="btn-icon" title="Editar">
+                                            <i class="fas fa-pencil-alt"></i>
+                                        </a>
+                                        <form method="POST" action="{{ route('working-days.destroy', $day->id) }}" style="display: inline-block;">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn-icon btn-delete" onclick="return confirm('Tem certeza que deseja excluir este dia útil?')" title="Excluir">
+                                                <i class="fas fa-trash-alt"></i>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
                     </div>
                 </div>
             @endif
@@ -228,6 +288,184 @@
     
     .actions {
         white-space: nowrap;
+    }
+    
+    @media (max-width: 768px) {
+        .working-days-container {
+            padding: 15px;
+            border-radius: 8px;
+        }
+        
+        .working-days-header {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        
+        .btn-add {
+            width: 100%;
+            justify-content: center;
+        }
+        
+        .table-responsive {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            width: 100%;
+        }
+        
+        .table {
+            min-width: 600px;
+        }
+        
+        .table th, .table td {
+            padding: 12px 10px;
+        }
+        
+        .actions {
+            display: flex;
+        }
+    }
+    
+    @media (max-width: 480px) {
+        .page-title {
+            font-size: 22px;
+        }
+        
+        .empty-icon {
+            font-size: 40px;
+        }
+        
+        .empty-state h3 {
+            font-size: 18px;
+        }
+        
+        .empty-state p {
+            font-size: 14px;
+        }
+        
+        .btn-icon {
+            width: 32px;
+            height: 32px;
+        }
+        
+        .alert {
+            padding: 12px;
+            font-size: 14px;
+        }
+    }
+    
+    /* Layout para visualização mobile em cards */
+    .mobile-view {
+        display: none;
+    }
+    
+    .day-card {
+        background-color: var(--white);
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        margin-bottom: 15px;
+        overflow: hidden;
+    }
+    
+    .day-header {
+        background-color: var(--accent-color);
+        color: var(--white);
+        padding: 12px 15px;
+    }
+    
+    .day-header h3 {
+        margin: 0;
+        font-size: 16px;
+        font-weight: 500;
+    }
+    
+    .day-body {
+        padding: 15px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    .day-info {
+        flex: 1;
+    }
+    
+    .info-item {
+        margin-bottom: 8px;
+        display: flex;
+        align-items: baseline;
+    }
+    
+    .info-item:last-child {
+        margin-bottom: 0;
+    }
+    
+    .info-label {
+        font-weight: 500;
+        color: var(--dark-color);
+        margin-right: 5px;
+        font-size: 14px;
+    }
+    
+    .info-value {
+        color: var(--text-color);
+        font-size: 14px;
+    }
+    
+    .day-actions {
+        display: flex;
+        gap: 5px;
+    }
+    
+    /* Mostrar visualização mobile e ocultar desktop em telas menores */
+    @media (max-width: 768px) {
+        .desktop-view {
+            display: none;
+        }
+        
+        .mobile-view {
+            display: block;
+        }
+        
+        .working-days-header {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 15px;
+        }
+        
+        .working-days-actions {
+            width: 100%;
+        }
+        
+        .btn-add {
+            width: 100%;
+            justify-content: center;
+        }
+        
+        .day-card {
+            margin-bottom: 16px;
+        }
+        
+        .day-body {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 15px;
+        }
+        
+        .day-info {
+            width: 100%;
+        }
+        
+        .day-actions {
+            width: 100%;
+            justify-content: flex-end;
+            padding-top: 10px;
+            border-top: 1px solid #eee;
+        }
+        
+        .btn-icon {
+            width: 36px;
+            height: 36px;
+        }
     }
 </style>
 @endsection
