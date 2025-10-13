@@ -10,6 +10,10 @@
                 <a href="#" class="btn-add-appointment">
                     <i class="fas fa-plus"></i> Novo Agendamento
                 </a>
+                <div class="search-input-wrapper">
+                    <i class="fas fa-search search-icon"></i>
+                    <input type="text" id="smart-search" class="smart-search-input" placeholder="Buscar agendamentos...">
+                </div>
             </div>
         </div>
         
@@ -69,6 +73,42 @@
         font-size: 24px;
         color: var(--dark-color);
         margin: 0;
+    }
+    
+    .appointment-actions {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
+    
+    .search-input-wrapper {
+        position: relative;
+        width: 250px;
+    }
+    
+    .search-icon {
+        position: absolute;
+        left: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--text-color);
+        opacity: 0.6;
+    }
+    
+    .smart-search-input {
+        width: 100%;
+        padding: 10px 10px 10px 35px;
+        border-radius: 8px;
+        border: 1px solid var(--light-color);
+        background-color: var(--white);
+        font-size: 14px;
+        transition: all 0.3s;
+    }
+    
+    .smart-search-input:focus {
+        outline: none;
+        border-color: var(--accent-color);
+        box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.1);
     }
     
     .btn-add-appointment {
@@ -222,12 +262,55 @@
         color: #ff4c4c;
     }
     
-    /* Responsividade para mobile */
+    .empty-search-results {
+        text-align: center;
+        padding: 40px 20px;
+        background-color: var(--white);
+        border-radius: 12px;
+        box-shadow: var(--box-shadow);
+        margin-top: 20px;
+    }
+    
+    .empty-search-results .empty-icon {
+        font-size: 40px;
+        color: var(--text-color);
+        margin-bottom: 15px;
+        opacity: 0.5;
+    }
+    
+    .empty-search-results h3 {
+        color: var(--dark-color);
+        margin-bottom: 10px;
+    }
+    
+    .empty-search-results p {
+        color: var(--text-color);
+        max-width: 300px;
+        margin: 0 auto;
+    }
+    
     @media (max-width: 768px) {
         .appointments-header {
             flex-direction: column;
             align-items: flex-start;
             gap: 15px;
+        }
+        
+        .appointment-actions {
+            width: 100%;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .btn-add-appointment {
+            width: 100%;
+            justify-content: center;
+            order: 1;
+        }
+        
+        .search-input-wrapper {
+            width: 100%;
+            order: 2;
         }
     }
     
@@ -252,4 +335,57 @@
         }
     }
 </style>
+@endsection
+
+@section('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const searchInput = document.getElementById('smart-search');
+        const appointmentCards = document.querySelectorAll('.appointment-card');
+        
+        searchInput.addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase().trim();
+            
+            appointmentCards.forEach(card => {
+                const clientName = card.querySelector('.appointment-client h4').textContent.toLowerCase();
+                const serviceName = card.querySelector('.service-name').textContent.toLowerCase();
+                const appointmentDate = card.querySelector('.date-text').textContent.toLowerCase();
+                const appointmentTime = card.querySelector('.appointment-time').textContent.toLowerCase();
+                const statusEl = card.querySelector('.status-badge');
+                const status = statusEl ? statusEl.textContent.toLowerCase() : '';
+                
+                const isMatch = 
+                    clientName.includes(searchTerm) || 
+                    serviceName.includes(searchTerm) || 
+                    appointmentDate.includes(searchTerm) || 
+                    appointmentTime.includes(searchTerm) || 
+                    status.includes(searchTerm);
+                
+                card.style.display = isMatch ? 'flex' : 'none';
+            });
+            
+            const visibleCards = document.querySelectorAll('.appointment-card[style="display: flex;"]');
+            const emptyState = document.querySelector('.empty-search-results');
+            
+            if (searchTerm && visibleCards.length === 0) {
+                if (!emptyState) {
+                    const noResults = document.createElement('div');
+                    noResults.className = 'empty-search-results';
+                    noResults.innerHTML = `
+                        <div class="empty-icon">
+                            <i class="fas fa-search"></i>
+                        </div>
+                        <h3>Nenhum resultado encontrado</h3>
+                        <p>Tente outros termos de busca</p>
+                    `;
+                    
+                    const appointmentsList = document.querySelector('.appointments-list');
+                    appointmentsList.parentNode.appendChild(noResults);
+                }
+            } else if (emptyState) {
+                emptyState.remove();
+            }
+        });
+    });
+</script>
 @endsection
