@@ -7,9 +7,6 @@
         <div class="appointments-header">
             <h1 class="page-title">Minha Agenda</h1>
             <div class="appointment-actions">
-                <a href="#" class="btn-add-appointment">
-                    <i class="fas fa-plus"></i> Novo Agendamento
-                </a>
                 <div class="search-input-wrapper">
                     <i class="fas fa-search search-icon"></i>
                     <input type="text" id="smart-search" class="smart-search-input" placeholder="Buscar agendamentos...">
@@ -109,22 +106,6 @@
         outline: none;
         border-color: var(--accent-color);
         box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.1);
-    }
-    
-    .btn-add-appointment {
-        background-color: var(--accent-color);
-        color: var(--white);
-        padding: 10px 20px;
-        border-radius: 8px;
-        text-decoration: none;
-        display: inline-flex;
-        align-items: center;
-        gap: 10px;
-        transition: all 0.3s;
-    }
-    
-    .btn-add-appointment:hover {
-        background-color: #2b98c7;
     }
     
     .empty-state {
@@ -298,19 +279,10 @@
         
         .appointment-actions {
             width: 100%;
-            flex-direction: column;
-            gap: 10px;
-        }
-        
-        .btn-add-appointment {
-            width: 100%;
-            justify-content: center;
-            order: 1;
         }
         
         .search-input-wrapper {
             width: 100%;
-            order: 2;
         }
     }
     

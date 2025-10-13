@@ -19,7 +19,7 @@
         :root {
             --primary-color: #2d2c2d;
             --secondary-color: #1e1d1e;
-            --accent-color: #2196f3;
+            --accent-color: #211d1d;
             --dark-color: #111B21;
             --light-color: #F0F2F5;
             --text-color: #54656F;
@@ -33,17 +33,26 @@
             box-sizing: border-box;
         }
         
+        html, body {
+            height: 100%;
+            overflow: hidden;
+        }
+        
         body {
             font-family: 'Poppins', sans-serif;
             background-color: var(--light-color);
             color: var(--text-color);
-            min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
-            overflow-x: hidden;
             width: 100%;
-            padding: 0 10px;
+            padding: 0;
+            margin: 0;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
         }
         
         .login-container {
@@ -51,6 +60,8 @@
             max-width: 400px;
             padding: 10px;
             margin: 0 auto;
+            height: auto;
+            max-height: 100%;
         }
         
         .login-card {
@@ -177,9 +188,17 @@
         
         @media (max-width: 480px) {
             .login-container {
-                padding: 10px;
+                padding: 0;
                 max-width: 100%;
-                width: 95%;
+                width: 92%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            
+            .login-card {
+                width: 100%;
+                max-height: calc(100vh - 20px);
             }
             
             .login-title {
@@ -187,11 +206,11 @@
             }
             
             .login-header {
-                padding: 20px 15px;
+                padding: 15px 15px;
             }
             
             .login-body {
-                padding: 0 15px 20px;
+                padding: 0 15px 15px;
             }
             
             .form-input {
@@ -204,38 +223,16 @@
             }
             
             .logo {
-                max-width: 80px;
+                max-width: 70px;
+                margin-bottom: 10px;
             }
             
             .login-subtitle {
                 font-size: 13px;
             }
-        }
-        
-        @media (prefers-color-scheme: dark) {
-            :root {
-                --light-color: #111B21;
-                --white: #202C33;
-                --text-color: #AEBAC1;
-                --box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
-            }
             
-            .login-title {
-                color: #E9EDF0;
-            }
-            
-            .form-input {
-                background-color: #2A3942;
-                border-color: #374045;
-                color: #E9EDF0;
-            }
-            
-            .divider-line {
-                background-color: #374045;
-            }
-            
-            .social-btn {
-                background-color: #2A3942;
+            .input-group {
+                margin-bottom: 15px;
             }
         }
     </style>

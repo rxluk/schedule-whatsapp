@@ -23,7 +23,7 @@
         :root {
             --primary-color: #2d2c2d;
             --secondary-color: #1e1d1e;
-            --accent-color: #2196f3;
+            --accent-color: #211d1d;
             --dark-color: #111B21;
             --light-color: #F0F2F5;
             --text-color: #54656F;
