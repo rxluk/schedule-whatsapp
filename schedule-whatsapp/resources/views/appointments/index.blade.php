@@ -38,8 +38,8 @@
                                     <h4>{{ $appointment->client->name ?? 'Cliente' }}</h4>
                                     <p class="service-name">{{ $appointment->service->name ?? 'Serviço' }}</p>
                                 </div>
-                                <div class="appointment-status" data-status="{{ strtolower($appointment->status) }}">
-                                    {{ $appointment->status }}
+                                <div class="appointment-status-wrapper">
+                                    @livewire('appointment-status', ['appointment' => $appointment], key('appointment-'.$appointment->id))
                                 </div>
                             </div>
                             <div class="appointment-actions">
@@ -125,6 +125,7 @@
         display: flex;
         flex-direction: column;
         gap: 15px;
+        overflow: visible;
     }
     
     .appointment-card {
@@ -133,7 +134,7 @@
         background-color: var(--white);
         border-radius: 12px;
         box-shadow: var(--box-shadow);
-        overflow: hidden;
+        overflow: visible;
         transition: all 0.3s;
     }
     
@@ -179,6 +180,16 @@
     
     .appointment-client {
         flex: 1;
+    }
+    
+    .appointment-status-wrapper {
+        position: relative;
+        z-index: 900;
+        width: 150px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
     }
     
     .appointment-client h4 {

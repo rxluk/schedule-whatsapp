@@ -27,9 +27,32 @@ class AppointmentController extends Controller
     public function getAppointmentsByUserId(Request $request)
     {
         $appointments = Appointment::where('user_id', $request->user_id)
+        ->select('appointment_date', 'appointment_time', 'appointment_time_end', 'status')
             ->get();
         
         return response()->json($appointments);
+    }
+
+    private function getWorkingDaysByUserId($user_id)
+    {
+        $workingDays = WorkingDays::where('user_id', $user_id)
+            ->get();
+
+        return $workingDays;
+    }
+
+    private function getUnavailableDaysByUserId($user_id)
+    {
+        $unavailableDays = UnavailableDays::where('user_id', $user_id)
+            ->get();
+
+        return $unavailableDays;
+    }
+
+    private function getDayOfWeek($date)
+    {
+        $dayOfWeek = \Carbon\Carbon::parse($date)->dayOfWeekIso;
+        return $dayOfWeek;
     }
 
     public function store(Request $request)
@@ -118,28 +141,6 @@ class AppointmentController extends Controller
                 'error' => $e->getMessage()
             ], 500);
         }
-    }
-
-    private function getWorkingDaysByUserId($user_id)
-    {
-        $workingDays = WorkingDays::where('user_id', $user_id)
-            ->get();
-
-        return $workingDays;
-    }
-
-    private function getUnavailableDaysByUserId($user_id)
-    {
-        $unavailableDays = UnavailableDays::where('user_id', $user_id)
-            ->get();
-
-        return $unavailableDays;
-    }
-
-    private function getDayOfWeek($date)
-    {
-        $dayOfWeek = \Carbon\Carbon::parse($date)->dayOfWeekIso;
-        return $dayOfWeek;
     }
 
     public function show($id)
