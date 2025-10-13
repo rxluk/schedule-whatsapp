@@ -6,6 +6,8 @@ use App\Http\Controllers\ClientController;
 use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\UtilsController;
+use App\Http\Controllers\WorkingDaysController;
+use App\Http\Controllers\UnavailableDaysController;
 use App\Models\Service;
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
@@ -19,4 +21,6 @@ Route::middleware('api.key')->group(function() {
     Route::get('/appointments/user', [AppointmentController::class, 'getAppointmentsByUserId']);
     Route::get('/services', [ServiceController::class, 'webIndex']);
     Route::get('/utils/user-client-ids', [UtilsController::class, 'getUserAndClientIdsByPhone']);
+    Route::get('/working-days/user', [WorkingDaysController::class, 'getWorkingDaysByUserId']);
+    Route::get('/unavailable-days/user', [UnavailableDaysController::class, 'getUnavailableDaysByUserId']);
 });

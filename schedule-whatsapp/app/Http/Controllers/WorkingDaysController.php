@@ -17,6 +17,15 @@ class WorkingDaysController extends Controller
         return view('working_days.index', compact('workingDays'));
     }
 
+    public function getWorkingDaysByUserId(Request $request)
+    {
+        $workingDays = WorkingDays::where('user_id', $request->user_id)
+            ->select('day_of_week', 'opening_time', 'closing_time')
+            ->orderBy('day_of_week', 'asc')
+            ->get();
+        return response()->json($workingDays);
+    }
+
     public function create()
     {
         return view('working_days.create');

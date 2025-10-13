@@ -15,7 +15,9 @@ class ServiceController extends Controller
 
     public function webIndex(Request $request)
     {
-        $services = Service::where('user_id', $request->user_id)->get();
+        $services = Service::where('user_id', $request->user_id)
+        ->select('id', 'name', 'duration', 'price')
+        ->get();
         return $services;
     }
 

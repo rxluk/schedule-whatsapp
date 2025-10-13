@@ -17,6 +17,15 @@ class UnavailableDaysController extends Controller
         return view('unavailable_days.index', compact('unavailableDays'));
     }
 
+    public function getUnavailableDaysByUserId(Request $request)
+    {
+        $unavailableDays = UnavailableDays::where('user_id', $request->user_id)
+            ->select('unavailable_date', 'start_time', 'end_time', 'reason')
+            ->orderBy('unavailable_date', 'desc')
+            ->get();
+        return response()->json($unavailableDays);
+    }
+
     public function create()
     {
         return view('unavailable_days.create');

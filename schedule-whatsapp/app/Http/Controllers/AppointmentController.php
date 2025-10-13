@@ -45,14 +45,14 @@ class AppointmentController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => 'O estabelecimento está fechado neste dia.'
-            ], 400);
+            ], 200);
         }
 
         if($request->appointment_time < $workingInDay->opening_time || $request->appointment_time_end > $workingInDay->closing_time) {
             return response()->json([
                 'success' => false,
                 'message' => 'O horário selecionado está fora do horário de funcionamento do estabelecimento.'
-            ], 400);
+            ], 200);
         }
         
         $unavailableDays = $this->getUnavailableDaysByUserId($request->user_id);
@@ -67,7 +67,7 @@ class AppointmentController extends Controller
                 return response()->json([
                     'success' => false,
                     'message' => 'O estabelecimento está indisponível neste dia e horário: ' . $unavailableInDay->reason
-                ], 400);
+                ], 200);
             }
         }
 
@@ -75,7 +75,7 @@ class AppointmentController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => 'O horário de término deve ser maior que o horário de início.'
-            ], 400);
+            ], 200);
         }
 
         try {
