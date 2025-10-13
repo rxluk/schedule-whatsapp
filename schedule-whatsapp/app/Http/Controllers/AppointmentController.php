@@ -16,6 +16,7 @@ class AppointmentController extends Controller
     public function index()
     {
         $appointments = Appointment::where('user_id', Auth::id())
+            ->where('status', 'Agendado')
             ->with(['client', 'service'])
             ->orderBy('appointment_date', 'asc')
             ->orderBy('appointment_time', 'asc')
@@ -26,8 +27,9 @@ class AppointmentController extends Controller
 
     public function getAppointmentsByUserId(Request $request)
     {
-        $appointments = Appointment::where('user_id', $request->user_id)
-        ->select('appointment_date', 'appointment_time', 'appointment_time_end', 'status')
+        $appointments = Appointment::where('user_id', $request->user_id and 'status', 'Agendado')
+            ->where('status', 'Agendado')
+            ->select('appointment_date', 'appointment_time', 'appointment_time_end', 'status')
             ->get();
         
         return response()->json($appointments);
