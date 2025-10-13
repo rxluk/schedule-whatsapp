@@ -10,6 +10,7 @@ use App\Models\WorkingDays;
 use App\Models\UnavailableDays;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Carbon\Carbon;
 
 class AppointmentController extends Controller
 {
@@ -101,6 +102,17 @@ class AppointmentController extends Controller
                 'success' => false,
                 'message' => 'O horário de término deve ser maior que o horário de início.'
             ], 200);
+        }
+        
+        if (Carbon::parse($request->appointment_date)->isToday()) {
+            $currentTime = Carbon::now()->format('H:i');
+            $appointmentTime = substr($request->appointment_time, 0, 5);
+            if ($appointmentTime < $currentTime) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'O horário do agendamento não pode ser inferior ao horário atual.'
+                ], 200);
+            }
         }
 
         try {
