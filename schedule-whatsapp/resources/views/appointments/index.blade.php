@@ -26,29 +26,22 @@
                 <div class="appointments-list">
                     @foreach($appointments as $appointment)
                         <div class="appointment-card">
-                            <div class="appointment-date">
-                                <div class="date-day">{{ \Carbon\Carbon::parse($appointment->appointment_date)->format('d') }}</div>
-                                <div class="date-month">{{ \Carbon\Carbon::parse($appointment->appointment_date)->format('M') }}</div>
+                            <div class="appointment-date-header">
+                                <div class="date-text">{{ \Carbon\Carbon::parse($appointment->appointment_date)->format('d') }} - {{ \Carbon\Carbon::parse($appointment->appointment_date)->format('M') }}</div>
                             </div>
-                            <div class="appointment-details">
+                            <div class="appointment-content">
                                 <div class="appointment-time">
                                     <i class="far fa-clock"></i> {{ $appointment->appointment_time }}
                                 </div>
-                                <div class="appointment-client">
-                                    <h4>{{ $appointment->client->name ?? 'Cliente' }}</h4>
-                                    <p class="service-name">{{ $appointment->service->name ?? 'Serviço' }}</p>
+                                <div class="appointment-top">
+                                    <div class="appointment-client">
+                                        <h4>{{ $appointment->client->name ?? 'Cliente' }}</h4>
+                                        <p class="service-name">{{ $appointment->service->name ?? 'Serviço' }}</p>
+                                    </div>
+                                    <div class="appointment-status-wrapper">
+                                        @livewire('appointment-status', ['appointment' => $appointment], key('appointment-'.$appointment->id))
+                                    </div>
                                 </div>
-                                <div class="appointment-status-wrapper">
-                                    @livewire('appointment-status', ['appointment' => $appointment], key('appointment-'.$appointment->id))
-                                </div>
-                            </div>
-                            <div class="appointment-actions">
-                                <a href="#" class="btn-icon" title="Editar">
-                                    <i class="fas fa-pencil-alt"></i>
-                                </a>
-                                <a href="#" class="btn-icon" title="Cancelar">
-                                    <i class="fas fa-times"></i>
-                                </a>
                             </div>
                         </div>
                     @endforeach
@@ -92,7 +85,6 @@
     
     .btn-add-appointment:hover {
         background-color: #2b98c7;
-        transform: translateY(-2px);
     }
     
     .empty-state {
@@ -124,58 +116,63 @@
     .appointments-list {
         display: flex;
         flex-direction: column;
-        gap: 15px;
-        overflow: visible;
+        gap: 10px;
     }
     
     .appointment-card {
-        display: flex;
-        align-items: center;
+        position: relative;
         background-color: var(--white);
+        padding: 0;
         border-radius: 12px;
         box-shadow: var(--box-shadow);
-        overflow: visible;
-        transition: all 0.3s;
+        display: flex;
+        flex-direction: column;
     }
     
     .appointment-card:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
     }
     
-    .appointment-date {
-        width: 80px;
-        height: 80px;
+    .appointment-date-header {
+        width: 100%;
         background-color: var(--accent-color);
         color: var(--white);
         display: flex;
-        flex-direction: column;
         align-items: center;
         justify-content: center;
         font-weight: 600;
+        border-radius: 12px 12px 0 0;
+        padding: 10px;
     }
     
-    .date-day {
-        font-size: 24px;
-        line-height: 1;
-    }
-    
-    .date-month {
-        font-size: 14px;
+    .date-text {
+        font-size: 16px;
         text-transform: uppercase;
+        letter-spacing: 1px;
     }
     
-    .appointment-details {
-        flex: 1;
-        padding: 15px;
-        display: flex;
-        align-items: center;
+    .appointment-content {
+        padding: 12px;
     }
     
     .appointment-time {
-        width: 100px;
         font-weight: 500;
         color: var(--dark-color);
+        font-size: 14px;
+        margin-bottom: 8px;
+    }
+    
+    .appointment-content {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .appointment-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 5px;
     }
     
     .appointment-client {
@@ -184,33 +181,30 @@
     
     .appointment-status-wrapper {
         position: relative;
-        z-index: 900;
-        width: 150px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        height: 100%;
+        z-index: 5;
+        margin-left: 10px;
     }
     
     .appointment-client h4 {
-        font-size: 16px;
+        font-size: 15px;
         color: var(--dark-color);
-        margin: 0 0 5px;
+        margin: 0 0 3px;
     }
     
     .service-name {
-        font-size: 14px;
+        font-size: 13px;
         color: var(--text-color);
         margin: 0;
     }
     
     .appointment-status {
-        padding: 5px 12px;
+        padding: 4px 10px;
         border-radius: 20px;
-        font-size: 12px;
+        font-size: 11px;
         font-weight: 500;
-        width: 100px;
+        width: 90px;
         text-align: center;
+        display: inline-block;
     }
     
     .appointment-status[data-status="agendado"] {
@@ -228,30 +222,6 @@
         color: #ff4c4c;
     }
     
-    .appointment-actions {
-        padding: 15px;
-        display: flex;
-        gap: 8px;
-    }
-    
-    .btn-icon {
-        width: 36px;
-        height: 36px;
-        border-radius: 8px;
-        background-color: var(--light-color);
-        color: var(--text-color);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        text-decoration: none;
-        transition: all 0.2s;
-    }
-    
-    .btn-icon:hover {
-        background-color: var(--accent-color);
-        color: var(--white);
-    }
-    
     /* Responsividade para mobile */
     @media (max-width: 768px) {
         .appointments-header {
@@ -259,35 +229,26 @@
             align-items: flex-start;
             gap: 15px;
         }
-        
-        .appointment-details {
-            flex-direction: column;
-            align-items: flex-start;
-        }
-        
-        .appointment-time, .appointment-client, .appointment-status {
-            width: 100%;
-            margin-bottom: 10px;
-        }
-        
-        .appointment-time {
-            margin-bottom: 5px;
-        }
     }
     
     @media (max-width: 576px) {
-        .appointment-card {
-            flex-direction: column;
-            align-items: stretch;
+        .appointment-top {
+            flex-wrap: nowrap;
+            align-items: center;
         }
         
-        .appointment-date {
-            width: 100%;
-            height: auto;
-            padding: 10px;
-            flex-direction: row;
-            justify-content: center;
-            gap: 10px;
+        .appointment-client {
+            max-width: 65%;
+        }
+        
+        .appointment-status-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+        }
+        
+        .date-text {
+            font-size: 14px;
         }
     }
 </style>

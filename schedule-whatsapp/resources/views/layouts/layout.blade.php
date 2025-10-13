@@ -161,25 +161,22 @@
             color: var(--dark-color);
         }
 
-        .dropdown-menu {
+                .dropdown-menu {
             position: absolute;
-            top: 100%;
             right: 0;
             background-color: var(--white);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            box-shadow: var(--box-shadow);
+            padding: 5px 0;
             border-radius: 8px;
             min-width: 180px;
             margin-top: 10px;
             opacity: 0;
             visibility: hidden;
-            transform: translateY(10px);
-            transition: all 0.3s;
         }
 
         .user-profile:hover .dropdown-menu {
             opacity: 1;
             visibility: visible;
-            transform: translateY(0);
         }
 
         .dropdown-menu a {

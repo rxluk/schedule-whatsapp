@@ -204,7 +204,6 @@
     
     .btn-save:hover {
         background-color: #2a92c1;
-        transform: translateY(-2px);
     }
     
     .btn-cancel {

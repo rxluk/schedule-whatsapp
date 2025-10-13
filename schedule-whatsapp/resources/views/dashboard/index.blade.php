@@ -64,12 +64,10 @@
         padding: 20px;
         display: flex;
         align-items: center;
-        transition: all 0.3s;
         cursor: pointer;
     }
     
     .dashboard-card:hover {
-        transform: translateY(-5px);
         box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
     }
     

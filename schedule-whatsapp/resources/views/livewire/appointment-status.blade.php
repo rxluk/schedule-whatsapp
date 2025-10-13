@@ -33,6 +33,7 @@
         .status-container {
             position: relative;
             display: inline-block;
+            z-index: 1;
         }
         
         .status-badge {
@@ -44,6 +45,8 @@
             display: inline-flex;
             align-items: center;
             gap: 5px;
+            position: relative;
+            z-index: 2;
         }
         
         .status-badge[data-status="agendado"] { background-color: #4CAF50; }
@@ -57,6 +60,8 @@
             left: 0;
             margin-top: 5px;
             min-width: 150px;
+            max-height: 200px;
+            overflow-y: auto;
             background-color: white;
             border-radius: 5px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.15);
@@ -117,17 +122,40 @@
                 const overlay = document.createElement('div');
                 overlay.className = 'status-overlay';
                 overlay.id = overlayId;
+                overlay.style.pointerEvents = 'auto';
+                overlay.style.background = 'transparent';
                 document.body.appendChild(overlay);
             function showDropdown() {
                 const rect = badge.getBoundingClientRect();
                 
-                document.body.appendChild(dropdown);
+                const container = badge.closest('.status-container');
+                if (container) {
+                    container.appendChild(dropdown);
+                }
                 
-                dropdown.style.position = 'fixed';
-                dropdown.style.top = (rect.bottom + window.scrollY + 5) + 'px';
-                dropdown.style.left = (rect.left + window.scrollX) + 'px';
+                const spaceBelow = window.innerHeight - rect.bottom;
+                const spaceAbove = rect.top;
+                
+                const dropdownHeight = dropdown.scrollHeight || 180;
+                
+                const openUpwards = spaceBelow < dropdownHeight && spaceAbove > dropdownHeight;
+                
+                dropdown.style.position = 'absolute';
+                dropdown.style.top = openUpwards ? 'auto' : '100%';
+                dropdown.style.bottom = openUpwards ? '100%' : 'auto';
+                dropdown.style.left = '0';
+                dropdown.style.marginTop = openUpwards ? '0' : '5px';
+                dropdown.style.marginBottom = openUpwards ? '5px' : '0';
                 dropdown.style.display = 'block';
                 dropdown.style.zIndex = '99999';
+                
+                setTimeout(() => {
+                    const dropdownRect = dropdown.getBoundingClientRect();
+                    if (dropdownRect.right > window.innerWidth) {
+                        dropdown.style.left = 'auto';
+                        dropdown.style.right = '0';
+                    }
+                }, 0);
                 
                 overlay.style.display = 'block';
             }
@@ -181,9 +209,14 @@
                     setTimeout(function() {
                         const newBadge = document.getElementById('status-badge-' + currentAppointmentId);
                         const newDropdown = document.getElementById('status-dropdown-' + currentAppointmentId);
+                        const container = newBadge ? newBadge.closest('.status-container') : null;
                         
-                        if (newBadge && newDropdown) {
+                        if (newBadge && newDropdown && container) {
                             console.log('Componente atualizado para appointmentId:', currentAppointmentId);
+                            
+                            if (newDropdown.parentNode !== container) {
+                                container.appendChild(newDropdown);
+                            }
                         }
                     }, 100);
                 });
