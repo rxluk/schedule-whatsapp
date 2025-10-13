@@ -33,7 +33,7 @@
         .status-container {
             position: relative;
             display: inline-block;
-            z-index: 1;
+            z-index: 100;
         }
         
         .status-badge {
@@ -65,7 +65,7 @@
             background-color: white;
             border-radius: 5px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-            z-index: 9999;
+            z-index: 999999;
             display: none;
         }
         
@@ -95,7 +95,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: 9998;
+            z-index: 999998;
             display: none;
         }
     </style>
@@ -128,10 +128,8 @@
             function showDropdown() {
                 const rect = badge.getBoundingClientRect();
                 
-                const container = badge.closest('.status-container');
-                if (container) {
-                    container.appendChild(dropdown);
-                }
+                // Mover o dropdown para o body para evitar problemas de z-index
+                document.body.appendChild(dropdown);
                 
                 const spaceBelow = window.innerHeight - rect.bottom;
                 const spaceAbove = rect.top;
@@ -140,20 +138,28 @@
                 
                 const openUpwards = spaceBelow < dropdownHeight && spaceAbove > dropdownHeight;
                 
-                dropdown.style.position = 'absolute';
-                dropdown.style.top = openUpwards ? 'auto' : '100%';
-                dropdown.style.bottom = openUpwards ? '100%' : 'auto';
-                dropdown.style.left = '0';
-                dropdown.style.marginTop = openUpwards ? '0' : '5px';
-                dropdown.style.marginBottom = openUpwards ? '5px' : '0';
+                // Usamos posição fixa para garantir que o dropdown não seja afetado pelo fluxo do documento
+                dropdown.style.position = 'fixed';
                 dropdown.style.display = 'block';
-                dropdown.style.zIndex = '99999';
+                
+                // Calculamos a posição exata baseada nas coordenadas do badge
+                if (openUpwards) {
+                    dropdown.style.top = 'auto';
+                    dropdown.style.bottom = (window.innerHeight - rect.top + 5) + 'px';
+                } else {
+                    dropdown.style.top = (rect.bottom + 5) + 'px';
+                    dropdown.style.bottom = 'auto';
+                }
+                
+                dropdown.style.left = rect.left + 'px';
+                dropdown.style.zIndex = '999999';
+                dropdown.style.width = Math.max(rect.width, 150) + 'px';
                 
                 setTimeout(() => {
                     const dropdownRect = dropdown.getBoundingClientRect();
                     if (dropdownRect.right > window.innerWidth) {
                         dropdown.style.left = 'auto';
-                        dropdown.style.right = '0';
+                        dropdown.style.right = '10px';
                     }
                 }, 0);
                 
@@ -163,6 +169,20 @@
             function hideDropdown() {
                 dropdown.style.display = 'none';
                 overlay.style.display = 'none';
+                
+                // Restauramos o dropdown para o container original
+                const container = badge.closest('.status-container');
+                if (container && dropdown.parentNode === document.body) {
+                    container.appendChild(dropdown);
+                    
+                    // Restaurar os estilos originais
+                    dropdown.style.position = 'absolute';
+                    dropdown.style.top = '100%';
+                    dropdown.style.left = '0';
+                    dropdown.style.right = 'auto';
+                    dropdown.style.bottom = 'auto';
+                    dropdown.style.width = 'auto';
+                }
             }
             
             badge.addEventListener('click', function(e) {
